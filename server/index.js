@@ -1,4 +1,13 @@
 const { Server } = require("socket.io");
+
+const express = require("express");
+const path = require("path");
+
+const app = express(); // <-- This is required
+
+const _dirName = __dirname;
+
+app.use(express.static(path.join(_dirName, "client/build")));
 const path =require("path") 
 
 const io = new Server(8000, {
