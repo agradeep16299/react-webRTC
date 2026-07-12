@@ -20,10 +20,10 @@ const io = new Server(server, {
 // app.get("*",(req,res)=>{
 //   res.sendFile(path.resolve(__dirName,"client","build","index.html"))
 // })
-app.use(express.static(path.join(__dirname, "./client/build")));
+app.use(express.static(path.join(__dirname, "client/build")));
 
-app.get("/*", (req, res) => {
-  res.sendFile(path.join(__dirname, "client", "build", "index.html"));
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "client/build", "index.html"));
 });
 
 const emailToSocketIdMap = new Map();
