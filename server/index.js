@@ -1,24 +1,30 @@
 const { Server } = require("socket.io");
 
 const express = require("express");
-const path = require("path");
+ const path = require("path");
+const http = require("http");
+
 
 const app = express(); // <-- This is required
+const server = http.createServer(app);
 
-const _dirName = __dirname;
 
-app.use(express.static(path.join(_dirName, "client/build")));
-const path =require("path") 
-
-const io = new Server(8000, {
-  cors: true,
+const io = new Server(server, {
+  cors: {
+    origin: "*",
+  },
 });
-const _dirName=path.resolve()
 
-app.use(express.static(path.join(_dirName,"./client/build")))
-app.get("*",(req,res)=>{
-  res.sendFile(path.resolve(_dirName,"client","build","index.html"))
-})
+
+// app.use(express.static(path.join(__dirName,"./client/build")))
+// app.get("*",(req,res)=>{
+//   res.sendFile(path.resolve(__dirName,"client","build","index.html"))
+// })
+app.use(express.static(path.join(__dirname, "./client/build")));
+
+app.get("/*", (req, res) => {
+  res.sendFile(path.join(__dirname, "client", "build", "index.html"));
+});
 
 const emailToSocketIdMap = new Map();
 const socketidToEmailMap = new Map();
@@ -51,4 +57,8 @@ io.on("connection", (socket) => {
     console.log("peer:nego:done", ans);
     io.to(to).emit("peer:nego:final", { from: socket.id, ans });
   });
+});
+
+server.listen(8000, () => {
+  console.log("Server running on port 8000");
 });
